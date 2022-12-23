@@ -1,0 +1,27 @@
+{
+  "name": "com.lrt.livelytmp",
+  "version": "1.0",
+  "displayName": "Lively TMP",
+  "description": "Make the text more lively",
+  "dependencies": {
+    "com.unity.textmeshpro": "2.0.1"
+  },
+  "keywords": [
+    "TMP",
+    "TMP Extensions",
+    "Rich Text",
+    "Unity"
+  ],
+  "author": {
+    "name": "Rossignol Lucas",
+    "email": "lucasrossignoltools@gmail.com"
+    "url": "https://github.com/LRTools"
+  }
+  "company": "LRTools",
+  "type": "package",
+  "unity": "2021.3.15f1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LRTools/LivelyText.git"
+  },
+}
