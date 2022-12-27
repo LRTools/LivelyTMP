@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace LRT.TMP_Lively.LinkTags
 {
+	[CreateAssetMenu(fileName = "WobbleTag", menuName = "LRT/TMP_Lively/Wobble")]
 	public class WobbleTag : LinkTag
 	{
 		public override string tag => "wobble";

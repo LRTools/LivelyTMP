@@ -6,7 +6,7 @@ using static LRT.TMP_Lively.TMP_Lively;
 
 namespace LRT.TMP_Lively.LinkTags
 {
-	public abstract class LinkTag
+	public abstract class LinkTag : ScriptableObject
 	{
 		public abstract string tag { get; }
 
