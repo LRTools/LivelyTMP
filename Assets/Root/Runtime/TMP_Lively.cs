@@ -2,7 +2,6 @@ using LRT.TMP_Lively.LinkTags;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -20,6 +19,7 @@ namespace LRT.TMP_Lively
 			text = GetComponent<TMP_Text>();
 
 			tags.Add(new ShakeTag());
+			tags.Add(new WobbleTag());
 		}
 
 		void Start()
@@ -69,11 +69,6 @@ namespace LRT.TMP_Lively
 			{
 				start = info.linkTextfirstCharacterIndex;
 				end = start + info.linkTextLength;
-			}
-
-			public bool Has(int index)
-			{
-				return index >= start && index < end;
 			}
 		}
 	}
