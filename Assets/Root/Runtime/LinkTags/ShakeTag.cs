@@ -8,7 +8,7 @@ namespace LRT.TMP_Lively.LinkTags
 	{
 		public override string tag => "shake";
 
-		public int speed = 5;
+		public int speed = 24;
 		public int strenght = 12;
 
 		public override void Process(TMP_Text text, TMP_Lively.LinkInfo linkinfo)
@@ -18,8 +18,11 @@ namespace LRT.TMP_Lively.LinkTags
 
 		private IEnumerator ShakeText(TMP_Text text, TMP_Lively.LinkInfo linkinfo)
 		{
+			// I don't know why, but if we don't do that the source vertices change 
+			// the y range will not be the same for each character.
+			yield return new WaitForEndOfFrame();
+
 			TMP_TextInfo textInfo = text.textInfo;
-			Matrix4x4 matrix;
 
 			// Cache the vertex data of the text object as the FX is applied to the original position of the characters.
 			TMP_MeshInfo[] cachedMeshInfo = textInfo.CopyMeshInfoVertexData();
@@ -35,22 +38,17 @@ namespace LRT.TMP_Lively.LinkTags
 			{
 				for (int i = linkinfo.start; i < linkinfo.end; i++)
 				{
-					if (!linkinfo.Has(i))
+					if (!textInfo.characterInfo[i].isVisible)
 						continue;
 
 					int materialIndex = textInfo.characterInfo[i].materialReferenceIndex;
 					int vertexIndex = textInfo.characterInfo[i].vertexIndex;
 					Vector3[] sourceVertices = cachedMeshInfo[materialIndex].vertices;
-
-					// Need to translate all 4 vertices of each quad to aligned with middle of character / baseline.
-					// This is needed so the matrix TRS is applied at the origin for each character.
-					Vector3 offset = GetCharMidBaseline(vertexIndex, sourceVertices);
 					Vector3[] destinationVertices = textInfo.meshInfo[materialIndex].vertices;
-					ResetDestinationWithSource(vertexIndex, sourceVertices, offset, destinationVertices);
 
-					matrix = Matrix4x4.TRS(GetShakeOffset(cachedShakeData[i - linkinfo.start]), Quaternion.identity, Vector3.one);
+					float yOffset = GetShakeOffset(cachedShakeData[i - linkinfo.start]).y;
 
-					ApplyMatrixChange(matrix, vertexIndex, offset, destinationVertices);
+					ApplyDestinationOffsetChange(vertexIndex, destinationVertices, sourceVertices, yOffset);
 				}
 
 				PushChangesIntoMeshes(text, textInfo);
@@ -61,22 +59,6 @@ namespace LRT.TMP_Lively.LinkTags
 		}
 
 		#region Helpers
-		private static Vector2 GetCharMidBaseline(int vertexIndex, Vector3[] sourceVertices)
-		{
-			// Determine the center point of each character at the baseline.
-			//Vector2 charMidBasline = new Vector2((sourceVertices[vertexIndex + 0].x + sourceVertices[vertexIndex + 2].x) / 2, charInfo.baseLine);
-			// Determine the center point of each character.
-			return (sourceVertices[vertexIndex + 0] + sourceVertices[vertexIndex + 2]) / 2;
-		}
-
-		private static void ResetDestinationWithSource(int vertexIndex, Vector3[] sourceVertices, Vector3 offset, Vector3[] destinationVertices)
-		{
-			destinationVertices[vertexIndex + 0] = sourceVertices[vertexIndex + 0] - offset;
-			destinationVertices[vertexIndex + 1] = sourceVertices[vertexIndex + 1] - offset;
-			destinationVertices[vertexIndex + 2] = sourceVertices[vertexIndex + 2] - offset;
-			destinationVertices[vertexIndex + 3] = sourceVertices[vertexIndex + 3] - offset;
-		}
-
 		private Vector3 GetShakeOffset(CharacterShakeData shakeData)
 		{
 			float shakeSpeed = speed * (1 + shakeData.speedModifier); // +1 stand to multiply by 1.xx instead of 0.xx 
@@ -86,17 +68,12 @@ namespace LRT.TMP_Lively.LinkTags
 			return new Vector3(0, YShakeOffset, 0); ;
 		}
 
-		private void ApplyMatrixChange(Matrix4x4 matrix, int vertexIndex, Vector3 offset, Vector3[] destinationVertices)
+		private void ApplyDestinationOffsetChange(int vertexIndex, Vector3[] destinationVertices, Vector3[] sourceVertices, float yOffset)
 		{
-			destinationVertices[vertexIndex + 0] = matrix.MultiplyPoint3x4(destinationVertices[vertexIndex + 0]);
-			destinationVertices[vertexIndex + 1] = matrix.MultiplyPoint3x4(destinationVertices[vertexIndex + 1]);
-			destinationVertices[vertexIndex + 2] = matrix.MultiplyPoint3x4(destinationVertices[vertexIndex + 2]);
-			destinationVertices[vertexIndex + 3] = matrix.MultiplyPoint3x4(destinationVertices[vertexIndex + 3]);
-
-			destinationVertices[vertexIndex + 0] += offset;
-			destinationVertices[vertexIndex + 1] += offset;
-			destinationVertices[vertexIndex + 2] += offset;
-			destinationVertices[vertexIndex + 3] += offset;
+			destinationVertices[vertexIndex + 0] = sourceVertices[vertexIndex + 0] + Vector3.up * yOffset;
+			destinationVertices[vertexIndex + 1] = sourceVertices[vertexIndex + 1] + Vector3.up * yOffset;
+			destinationVertices[vertexIndex + 2] = sourceVertices[vertexIndex + 2] + Vector3.up * yOffset;
+			destinationVertices[vertexIndex + 3] = sourceVertices[vertexIndex + 3] + Vector3.up * yOffset;
 		}
 
 		private void PushChangesIntoMeshes(TMP_Text text, TMP_TextInfo textInfo)
