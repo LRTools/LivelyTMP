@@ -1,3 +1,16 @@
 {
-	"name": "LRT.LivelyTMP.Editor"
+    "name": "LRT.LivelyTMP.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3c26848d0e486c944b6fe9de4d9db374"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
