@@ -1,6 +1,4 @@
 using LRT.TMP_Lively.LinkTags;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,14 +10,9 @@ namespace LRT.TMP_Lively
 	{
 		TMP_Text text;
 
-		public List<LinkTag> tags = new List<LinkTag>();
-
 		private void Awake()
 		{
 			text = GetComponent<TMP_Text>();
-
-			tags.Add(new ShakeTag());
-			tags.Add(new WobbleTag());
 		}
 
 		void Start()
@@ -32,7 +25,7 @@ namespace LRT.TMP_Lively
 
 			foreach (TMP_LinkInfo linkInfo in text.textInfo.linkInfo)
 			{
-				foreach (LinkTag linkTag in tags)
+				foreach (LinkTag linkTag in LinkTagSettings.Instance.tags)
 				{
 					if (linkTag.tag == linkInfo.GetLinkID())
 						linksTagInfo.Add(new LinkTagInfo(linkInfo, linkTag));

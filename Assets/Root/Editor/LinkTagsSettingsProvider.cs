@@ -1,39 +1,11 @@
-using LRT.TMP_Lively.LinkTags;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace LRT.LinkTags.Editor
+namespace LRT.TMP_Lively.LinkTags.Editor
 {
-	public class LinkTagSettings : ScriptableObject
-	{
-		private static readonly string LinkTagSettingsPath = "Assets/Root/Editor/";
-		private static readonly string AssetExtenstion = ".asset";
-		public static string FullSettingsPath => LinkTagSettingsPath + typeof(LinkTagSettings).Name + "Asset" + AssetExtenstion;
-
-		public List<LinkTag> tags = new List<LinkTag>();
-
-		internal static LinkTagSettings GetOrCreateSettings()
-		{
-			var settings = AssetDatabase.LoadAssetAtPath<LinkTagSettings>(FullSettingsPath);
-			if (settings == null)
-			{
-				settings = ScriptableObject.CreateInstance<LinkTagSettings>();
-
-				AssetDatabase.CreateAsset(settings, FullSettingsPath);
-				AssetDatabase.SaveAssets();
-			}
-			return settings;
-		}
-
-		internal static SerializedObject GetSerializedSettings()
-		{
-			return new SerializedObject(GetOrCreateSettings());
-		}
-	}
-
-	// Register a SettingsProvider using IMGUI for the drawing framework:
 	public class LinkTagSettingsProvider : SettingsProvider
 	{
 		public LinkTagSettingsProvider(string path, SettingsScope scope = SettingsScope.Project)
@@ -45,6 +17,7 @@ namespace LRT.LinkTags.Editor
 		{
 			settings.Update();
 
+			EditorGUILayout.PropertyField(settings.FindProperty(nameof(LinkTagSettings.enable)), new GUIContent("Enable"));
 			EditorGUILayout.PropertyField(settings.FindProperty(nameof(LinkTagSettings.tags)), new GUIContent("Tags"));
 
 			settings.ApplyModifiedProperties();
@@ -68,3 +41,5 @@ namespace LRT.LinkTags.Editor
 		}
 	}
 }
+
+

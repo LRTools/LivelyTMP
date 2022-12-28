@@ -35,7 +35,7 @@ namespace LRT.TMP_Lively.LinkTags
 				cachedWobbleData[i].yShiftOffset = i * frequency;
 			}
 
-			while (true)
+			while (LinkTagSettings.Instance.enable)
 			{
 				for (int i = linkinfo.start; i < linkinfo.end; i++)
 				{
