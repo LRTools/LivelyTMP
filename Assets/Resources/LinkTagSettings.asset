@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ed69fb5d84e0404ba1871ac4b831253, type: 3}
   m_Name: LinkTagSettings
   m_EditorClassIdentifier: 
-  tags: []
+  enable: 1
+  tags:
+  - {fileID: 11400000, guid: db80a92785aa25f4ca03ff67dbd972b5, type: 2}
+  - {fileID: 11400000, guid: 8150ff437426210479fff84342c2683b, type: 2}
