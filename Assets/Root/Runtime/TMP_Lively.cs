@@ -10,6 +10,8 @@ namespace LRT.TMP_Lively
 	{
 		TMP_Text text;
 
+		List<LinkTag> tags = new List<LinkTag>();
+
 		private void Awake()
 		{
 			text = GetComponent<TMP_Text>();
@@ -21,6 +23,32 @@ namespace LRT.TMP_Lively
 			// Alternatively, we could yield and wait until the end of the frame when the text object will be generated.
 			text.ForceMeshUpdate();
 
+			CheckAndProcessTags();
+		}
+
+		void OnEnable()
+		{
+			// Subscribe to event fired when text object has been regenerated.
+			TMPro_EventManager.TEXT_CHANGED_EVENT.Add(OnTextChanged);
+		}
+
+		void OnDisable()
+		{
+			TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(OnTextChanged);
+		}
+
+		void OnTextChanged(Object obj)
+		{
+			if (obj != text)
+				return;
+
+			text.StopAllCoroutines();
+
+			CheckAndProcessTags();
+		}
+
+		private void CheckAndProcessTags()
+		{
 			List<LinkTagInfo> linksTagInfo = new List<LinkTagInfo>();
 
 			foreach (TMP_LinkInfo linkInfo in text.textInfo.linkInfo)
