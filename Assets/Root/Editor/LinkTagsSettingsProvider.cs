@@ -8,7 +8,7 @@ namespace LRT.TMP_Lively.LinkTags.Editor
 {
 	public class LinkTagSettingsProvider : SettingsProvider
 	{
-		public LinkTagSettingsProvider(string path, SettingsScope scope = SettingsScope.Project)
+		public LinkTagSettingsProvider(string path, SettingsScope scope = SettingsScope.User)
 			: base(path, scope) { }
 
 		private SerializedObject settings;
@@ -33,7 +33,7 @@ namespace LRT.TMP_Lively.LinkTags.Editor
 		[SettingsProvider]
 		public static SettingsProvider CreateLinkTagsSettingProvider()
 		{
-			var provider = new LinkTagSettingsProvider("Project/LRT/Link Tags", SettingsScope.Project);
+			var provider = new LinkTagSettingsProvider("LRT/Link Tags", SettingsScope.User);
 
 			// Automatically extract all keywords from the Styles.
 			provider.keywords = new List<string>() { "LRT", "TMP", "TMPLively", "Lively", "Link", "LinkTags", "Tags", "RichText" };
