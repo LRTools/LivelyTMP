@@ -20,9 +20,7 @@ namespace LRT.TMP_Lively.LinkTags
 
 		private IEnumerator WobbleText(TMP_Text text, TMP_Lively.LinkInfo linkinfo)
 		{
-			// I don't know why, but if we don't do that the source vertices change 
-			// the y range will not be the same for each character.
-			yield return new WaitForEndOfFrame();
+			text.ForceMeshUpdate();
 
 			TMP_TextInfo textInfo = text.textInfo;
 
@@ -62,7 +60,7 @@ namespace LRT.TMP_Lively.LinkTags
 		#region Helpers
 		private Vector3 GetWobbleOffset(CharacterWobbleData wobbleData)
 		{
-			float yWobbleOffset = Mathf.PingPong((Time.time + wobbleData.yShiftOffset) * speed, 1);
+			float yWobbleOffset = Mathf.Sin((Time.time + wobbleData.yShiftOffset) * speed);
 
 			yWobbleOffset = Map(yWobbleOffset, 0, 1, -(strenght / 2), strenght / 2);
 

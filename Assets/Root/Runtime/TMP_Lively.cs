@@ -42,6 +42,9 @@ namespace LRT.TMP_Lively
 			if (obj != text)
 				return;
 
+			if (((TextMeshProUGUI)obj).text == text.text)
+				return;
+
 			text.StopAllCoroutines();
 
 			CheckAndProcessTags();
@@ -94,7 +97,5 @@ namespace LRT.TMP_Lively
 		}
 	}
 
-	
+
 }
-
-

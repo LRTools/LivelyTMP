@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f43767c6b99cee4caaa25881f4822e1, type: 3}
   m_Name: WobbleTag
   m_EditorClassIdentifier: 
-  speed: 1.2
-  strenght: 60
-  frequency: 0.25
+  speed: 3
+  strenght: 40
+  frequency: 0.2
